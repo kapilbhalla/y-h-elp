@@ -15,6 +15,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var mTableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    var searchBar2: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,7 +25,26 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         mTableView.rowHeight = UITableViewAutomaticDimension
         mTableView.estimatedRowHeight = 100
         searchBar.delegate = self
+        
+        searchBar2 = UISearchBar()
+        searchBar2.sizeToFit()
+        // the UIViewController comes with a navigationItem property
+        // this will automatically be initialized for you if when the
+        // view controller is added to a navigation controller's stack
+        // you just need to set the titleView to be the search bar
+        navigationItem.titleView = searchBar2
 
+        
+        searchDisplayController?.displaysSearchBarInNavigationBar = true
+        
+        //searchController.searchBar.sizeToFit()
+       // navigationItem.titleView = searchController.searchBar
+        
+        // By default the navigation bar hides when presenting the
+        // search interface.  Obviously we don't want this to happen if
+        // our search bar is inside the navigation bar.
+        //searchController.hidesNavigationBarDuringPresentation = false
+        
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
@@ -46,6 +67,16 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
          }
          }
          */
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
     }
     
     // This method updates filteredData based on the text in the Search Box
