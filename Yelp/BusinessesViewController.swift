@@ -13,7 +13,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     var businesses: [Business]!
     
     @IBOutlet weak var mTableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
     
     var searchBar2: UISearchBar!
     
@@ -24,18 +23,9 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         mTableView.delegate = self
         mTableView.rowHeight = UITableViewAutomaticDimension
         mTableView.estimatedRowHeight = 100
-        searchBar.delegate = self
+        initializeSearchBar()
         
-        searchBar2 = UISearchBar()
-        searchBar2.sizeToFit()
-        // the UIViewController comes with a navigationItem property
-        // this will automatically be initialized for you if when the
-        // view controller is added to a navigation controller's stack
-        // you just need to set the titleView to be the search bar
-        navigationItem.titleView = searchBar2
-
         
-        searchDisplayController?.displaysSearchBarInNavigationBar = true
         
         //searchController.searchBar.sizeToFit()
        // navigationItem.titleView = searchController.searchBar
@@ -69,8 +59,24 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
          */
     }
     
+    //initiate search bar
+    func initializeSearchBar () {
+        searchBar2 = UISearchBar()
+        searchBar2?.sizeToFit()
+        searchBar2?.placeholder = "search restaurants"
+        searchBar2?.delegate = self
+        // the UIViewController comes with a navigationItem property
+        // this will automatically be initialized for you if when the
+        // view controller is added to a navigation controller's stack
+        // you just need to set the titleView to be the search bar
+        navigationItem.titleView = searchBar2
+        
+        searchDisplayController?.displaysSearchBarInNavigationBar = true
+    }
+    
+    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        self.searchBar.showsCancelButton = true
+        self.searchBar2.showsCancelButton = true
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

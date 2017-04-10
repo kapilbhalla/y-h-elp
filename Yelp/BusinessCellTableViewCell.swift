@@ -26,7 +26,10 @@ class BusinessCellTableViewCell: UITableViewCell {
             reviewsCountLabel.text = String(describing: business.reviewCount)
             specialitiesLable.text = business.categories
             addressLabel.text = business.address
-            thumbImageView.setImageWith(business.imageURL!)
+            //thumbImageView.setImageWith(URLRequest, placeholderImage: <#T##UIImage?#>, success: <#T##((URLRequest, HTTPURLResponse?, UIImage) -> Void)?##((URLRequest, HTTPURLResponse?, UIImage) -> Void)?##(URLRequest, HTTPURLResponse?, UIImage) -> Void#>, failure: <#T##((URLRequest, HTTPURLResponse?, Error) -> Void)?##((URLRequest, HTTPURLResponse?, Error) -> Void)?##(URLRequest, HTTPURLResponse?, Error) -> Void#>)
+            if (business.imageURL != nil){
+                thumbImageView.setImageWith(business.imageURL!)
+            }
             ratingsImageView.setImageWith(business.ratingImageURL!)
             reviewsCountLabel.text = "\(business.reviewCount ?? 0) reviews"
             distanceLabel.text = business.distance
