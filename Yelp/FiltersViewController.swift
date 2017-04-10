@@ -31,6 +31,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.delegate = self
 
         // Do any additional setup after loading the view.
+        navigationController?.navigationBar.barTintColor = UIColor.red
     }
 
     override func didReceiveMemoryWarning() {

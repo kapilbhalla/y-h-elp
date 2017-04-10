@@ -25,6 +25,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         mTableView.estimatedRowHeight = 100
         initializeSearchBar()
         
+        navigationController?.navigationBar.barTintColor = UIColor.red
         
         
         //searchController.searchBar.sizeToFit()
