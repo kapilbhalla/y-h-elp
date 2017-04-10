@@ -8,11 +8,13 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate, UISearchBarDelegate {
     
     var businesses: [Business]!
     
     @IBOutlet weak var mTableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,7 +22,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         mTableView.delegate = self
         mTableView.rowHeight = UITableViewAutomaticDimension
         mTableView.estimatedRowHeight = 100
-        
+        searchBar.delegate = self
+
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
@@ -43,10 +46,28 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
          }
          }
          */
-        
     }
     
-    
+    // This method updates filteredData based on the text in the Search Box
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // When there is no text, filteredData is the same as the original data
+        // When user has entered text into the search box
+        // Use the filter method to iterate over all items in the data array
+        // For each item, return true if the item should be included and false if the
+        // item should NOT be included
+        Business.searchWithTerm(term: searchText, completion: { (businessesR: [Business]?, error: Error?) -> Void in
+            
+            self.businesses = businessesR
+            self.mTableView.reloadData()
+            if let businesses = businessesR {
+                for business in businesses {
+                    print(business.name!)
+                    print(business.address!)
+                }
+            }
+        })
+
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (businesses != nil){
@@ -71,14 +92,53 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        
+        let navigationController = segue.destination as! UINavigationController
+        
+        let filtersViewController = navigationController.topViewController as! FiltersViewController
+        
+        filtersViewController.delegate = self
+    }
+    
+    
+    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
+        
+        var categories = filters["categories"] as? [String]
+        
+        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil){
+            (businesses: [Business]?, error: Error?) -> Void in
+            self.businesses = businesses
+            self.mTableView.reloadData()
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }

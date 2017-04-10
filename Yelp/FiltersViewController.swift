@@ -8,11 +8,17 @@
 
 import UIKit
 
+@objc protocol FiltersViewControllerDelegate {
+    @objc optional func filtersViewController (filtersViewController: FiltersViewController,
+                                didUpdateFilters filters: [String:AnyObject])
+}
+
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
     var categories: [[String:String]]!
+    weak var delegate: FiltersViewControllerDelegate?
     
     // Dictionary that keeps account of the switch cell for each row.
     var switchStates = [Int:Bool]()
@@ -39,6 +45,25 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     @IBAction func onSearchBotton(_ sender: Any) {
         dismiss(animated: true)
+        
+        // if delegate exists then call the filters view controller method and pass self.
+        
+        var filters = [String : AnyObject]()
+        
+        var selectedCategories = [String]()
+        
+        for (row, isSelected) in switchStates {
+            
+            if isSelected {
+                selectedCategories.append(categories[row]["code"]!)
+            }
+        }
+        
+        if (selectedCategories.count > 0) {
+            filters["categories"] = selectedCategories as AnyObject
+        }
+        
+        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
     
     // This is a handler for clocking of the switch cell implemented through protocol
