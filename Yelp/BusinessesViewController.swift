@@ -14,6 +14,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     @IBOutlet weak var mTableView: UITableView!
     
+    var searchFilters: SearchFilters?
+    
     var searchBar2: UISearchBar!
     
     override func viewDidLoad() {
@@ -23,6 +25,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         mTableView.delegate = self
         mTableView.rowHeight = UITableViewAutomaticDimension
         mTableView.estimatedRowHeight = 100
+        initializeSearchFilters()
         initializeSearchBar()
         
         navigationController?.navigationBar.barTintColor = UIColor.red
@@ -60,6 +63,15 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
          */
     }
     
+    func initializeSearchFilters () {
+        //initiate seach filter
+        searchFilters = SearchFilters(sortBy: Filter(name: "Best Match", value: "0", isOn: true) ,
+                                      categories: nil,
+                                      deals: Filter(name: "Offering a Deal", value: "Offering a Deal" , isOn: false),
+                                      distance: Filter(name: "Auto", value: "-1", isOn: true))
+
+    }
+    
     //initiate search bar
     func initializeSearchBar () {
         searchBar2 = UISearchBar()
@@ -73,7 +85,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         navigationItem.titleView = searchBar2
         
         searchDisplayController?.displaysSearchBarInNavigationBar = true
-    }
+        
+           }
     
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -104,7 +117,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
                 }
             }
         })
-
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -118,7 +130,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCellTableViewCell
     
-        // 
         cell.business = businesses[indexPath.row]
 
         return cell
@@ -137,7 +148,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         let navigationController = segue.destination as! UINavigationController
         
         let filtersViewController = navigationController.topViewController as! FiltersViewController
-        
+        filtersViewController.searchFilters = searchFilters
         filtersViewController.delegate = self
     }
     

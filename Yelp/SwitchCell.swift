@@ -9,7 +9,7 @@
 import UIKit
 
 
-// This handles the
+// This handles the cases when the switch cell is tapped and its value changes.
 @objc protocol SwitchCellDelegate {
     
     // [KapiL] Why is this objc required ???
@@ -22,6 +22,8 @@ class SwitchCell: UITableViewCell {
     @IBOutlet weak var switchLabel: UILabel!
     @IBOutlet weak var onSwitch: UISwitch!
     
+    // Why is this required
+    var cellIndexPath: IndexPath!
     
     weak var delegate: SwitchCellDelegate?
     
@@ -40,8 +42,6 @@ class SwitchCell: UITableViewCell {
     @IBAction func onSwitchTap(_ sender: Any) {
         
         print ("switch value changed")
-        
-        //
         delegate?.switchCell?(switchCell: self, didChangeValue: onSwitch.isOn)
     }
 }
