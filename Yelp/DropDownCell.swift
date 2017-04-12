@@ -17,8 +17,8 @@ protocol DropDownCellDelegate {
 
 class DropDownCell: UITableViewCell {
 
-    @IBOutlet weak var name: UILabel!
     @IBOutlet weak var iconImage: UIImageView!
+    @IBOutlet weak var name: UILabel!
     
     // Why is this required
     var cellIndexPath: IndexPath!
